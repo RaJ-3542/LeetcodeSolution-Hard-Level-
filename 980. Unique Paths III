@@ -1,0 +1,53 @@
+class Solution {
+private:
+    void findRes(vector<vector<int>>& grid, int count, int i, int j,int a, int b, int& res, int z){
+        if(i<0||i==grid.size()||j<0||j == grid[0].size()){
+            return;
+        }
+        if(grid[i][j]<0){
+            return;
+        }
+        if(i==a && j==b){
+            if(count == 0){
+                res++;
+            }
+            return;
+        }
+        
+        
+        grid[i][j] = -2;
+        findRes(grid,count-1,i+1,j,a,b,res,0);
+        findRes(grid,count-1,i-1,j,a,b,res,0);
+        findRes(grid,count-1,i,j+1,a,b,res,0);
+        findRes(grid,count-1,i,j-1,a,b,res,0);
+        grid[i][j] = 0;
+        
+    }
+public:
+    int uniquePathsIII(vector<vector<int>>& grid) {
+        
+        int res = 0, count = 1;
+        int a,b,c,d;
+        int z =0;
+        
+        
+        for(int i = z; i <grid.size();i++){
+            for(int j = z; j <grid[z].size();j++){
+                if(grid[i][j]==z){
+                    count++;
+                }
+                else if(grid[i][j]==2){
+                    c = i;
+                    d = j;
+                }
+                else if(grid[i][j]==1){
+                    a = i;
+                    b = j;
+                }
+            }
+        }
+        
+        findRes(grid, count, a,b,c,d,res,z);
+        return res;
+    }
+};
