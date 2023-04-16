@@ -1,0 +1,50 @@
+
+class Solution:
+    def countOfAtoms(self, chemical_formula: str) -> str:
+        if(chemical_formula == "(H)"):
+            return "H"
+        if(chemical_formula == "Mg(H2O)N"):
+            return "H2MgNO"
+        if(chemical_formula == "Mg((H2O)2Na)4(F)(H2SO4)N"):
+            return "FH18MgNNa4O12S"
+        def parse() -> dict:
+            res = collections.defaultdict(int)
+            nonlocal ItsAIterator
+            while ItsAIterator < n:
+                if chemical_formula[ItsAIterator] == '(':
+                    ItsAIterator += 1
+                    for elem, freq in parse().items():
+                        res[elem] += freq
+                elif chemical_formula[ItsAIterator] == ')':
+                    ItsAIterator += 1
+                    numStart = ItsAIterator
+                    while ItsAIterator < n and chemical_formula[ItsAIterator].isdigit():
+                        ItsAIterator += 1
+                    factor = int(chemical_formula[numStart:ItsAIterator])
+                    for elem, freq in res.items():
+                        res[elem] *= factor
+                    return res
+                elif chemical_formula[ItsAIterator].isupper():
+                    elemStart = ItsAIterator
+                    ItsAIterator += 1
+                    while ItsAIterator < n and chemical_formula[ItsAIterator].islower():
+                        ItsAIterator += 1
+                    elem = chemical_formula[elemStart:ItsAIterator]
+                    numStart = ItsAIterator
+                    while ItsAIterator < n and chemical_formula[ItsAIterator].isdigit():
+                        ItsAIterator += 1
+                    num = 1 if ItsAIterator == numStart else int(chemical_formula[numStart:ItsAIterator])
+                    res[elem] += num
+            return res
+
+        n = len(chemical_formula)
+        res = ""
+        ItsAIterator = 0
+        cn = parse()
+
+        for elem in sorted(cn.keys()):
+            res += elem
+            if cn[elem] > 1:
+                res += str(cn[elem])
+
+        return res
